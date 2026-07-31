@@ -117,6 +117,11 @@ const renderer = {
     }
     return `<a href="${esc(href)}"${title ? ` title="${esc(title)}"` : ""}>${text || ""}</a>`;
   },
+  /* 原始 HTML 一律转义显示，杜绝恶意脚本执行 */
+  html(...args) {
+    const text = (typeof args[0] === "object" && args[0]) ? args[0].text : args[0];
+    return esc(text || "");
+  },
 };
 
 marked.use({ renderer, extensions: [mathExt] });

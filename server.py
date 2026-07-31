@@ -114,6 +114,20 @@ class Handler(BaseHTTPRequestHandler):
     server_version = "QingJian/1.0"
     ROOT = DEFAULT_ROOT  # 起始目录，创建 server 时设置
 
+    # ---------- 安全校验 ----------
+    def _check_host(self):
+        """防 DNS rebinding：Host 必须是本机地址"""
+        host = (self.headers.get("Host") or "").split(":")[0].strip("[]").lower()
+        return host in ("127.0.0.1", "localhost", "")
+
+    def _check_origin(self):
+        """防跨站请求：POST 携带的 Origin 必须来自本应用页面"""
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True
+        port = self.server.server_address[1]
+        return origin in (f"http://127.0.0.1:{port}", f"http://localhost:{port}")
+
     # ---------- 工具 ----------
     def _json(self, obj, code=200):
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
@@ -150,6 +164,9 @@ class Handler(BaseHTTPRequestHandler):
     # ---------- 路由 ----------
     def do_GET(self):
         parsed = urlparse(self.path)
+        if not self._check_host():
+            self._err("forbidden", 403)
+            return
         path = unquote(parsed.path)
         query = parse_qs(parsed.query)
         route = path.split("?", 1)[0]
@@ -230,6 +247,9 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         route = parsed.path
         try:
+            if not self._check_host() or not self._check_origin():
+                self._err("forbidden", 403)
+                return
             if route == "/api/write":
                 self.api_write()
             else:
