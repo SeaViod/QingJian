@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青简 · Markdown 阅读器</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23B4442E'/%3E%3Cpath d='M9 23V9l14 0v14z' fill='none' stroke='%23F4F1E8' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="vendor/highlight/github.min.css" id="hljs-light">
+<link rel="stylesheet" href="vendor/highlight/github-dark.min.css" id="hljs-dark" disabled>
+<link rel="stylesheet" href="vendor/node_modules/katex/dist/katex.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app" class="app">
+
+  <!-- 顶部工具栏 -->
+  <header class="topbar">
+    <div class="brand" title="青简 · 本地 Markdown 阅读器">
+      <span class="brand-dot"></span>
+      <span class="brand-name">青简</span>
+    </div>
+
+    <div class="pathbox">
+      <button id="btn-up" class="icon-btn" title="上一级 (Alt+↑)">↥</button>
+      <input id="path-input" class="path-input" spellcheck="false" placeholder="输入目录路径，回车跳转" title="目录路径，可直接编辑">
+    </div>
+
+    <div class="tools">
+      <div class="tool-group">
+        <button id="btn-edit" class="icon-btn" title="编辑 (Ctrl+E)">编</button>
+        <button id="btn-save" class="icon-btn" title="保存 (Ctrl+S)" hidden>存</button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-font-minus" class="icon-btn" title="减小字号 (Ctrl+-)">A−</button>
+        <button id="btn-font-plus" class="icon-btn" title="增大字号 (Ctrl+=)">A+</button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-width" class="icon-btn" title="切换行宽">宽</button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-theme" class="icon-btn theme-btn" title="切换主题 (Ctrl+Shift+T)">
+          <span class="theme-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-toc" class="icon-btn" title="章节目录 (Ctrl+Shift+D)">目</button>
+        <button id="btn-tree" class="icon-btn" title="文件树 (Ctrl+\)">树</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主区域 -->
+  <div class="main">
+
+    <!-- 文件树 -->
+    <aside id="tree-pane" class="pane tree-pane">
+      <div class="pane-head">
+        <span class="pane-title" id="tree-root-label">文件</span>
+        <button id="btn-refresh" class="mini-btn" title="刷新">↻</button>
+      </div>
+      <div class="tree-search-wrap">
+        <input id="tree-search" class="tree-search" placeholder="过滤文件（Ctrl+K）" spellcheck="false">
+      </div>
+      <nav id="tree" class="tree" tabindex="0" aria-label="文件树"></nav>
+      <div id="tree-status" class="tree-status"></div>
+    </aside>
+
+    <!-- 阅读区 -->
+    <main class="content">
+      <div id="doc-meta" class="doc-meta" hidden>
+        <span id="doc-name" class="doc-name"></span>
+        <span id="doc-dir" class="doc-dir"></span>
+      </div>
+      <div id="preview-banner" class="preview-banner" hidden>
+        预览模式：来自桌面拖拽的文件，图片与相对链接可能无法显示
+      </div>
+      <article id="reader" class="reader" tabindex="0"></article>
+      <div id="empty" class="empty">
+        <div class="empty-seal">青简</div>
+        <h1>一间安静的 Markdown 书房</h1>
+        <p>从左侧文件树选一篇，或把 .md 文件直接拖进窗口。</p>
+        <div class="empty-keys">
+          <div><kbd>Ctrl</kbd>+<kbd>K</kbd> 过滤文件</div>
+          <div><kbd>Ctrl</kbd>+<kbd>\</kbd> 文件树</div>
+          <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> 换主题</div>
+          <div><kbd>Ctrl</kbd>+<kbd>=</kbd> / <kbd>-</kbd> 字号</div>
+          <div><kbd>Alt</kbd>+<kbd>↑</kbd> 上一级</div>
+        </div>
+        <p class="empty-hint">支持：代码高亮 · 数学公式 · 表格 · 任务列表 · 章节目录</p>
+      </div>
+      <div id="error-box" class="error-box" hidden></div>
+    </main>
+
+    <!-- 目录 -->
+    <aside id="toc-pane" class="pane toc-pane">
+      <div class="pane-head"><span class="pane-title">章节</span></div>
+      <nav id="toc" class="toc" aria-label="章节目录"></nav>
+    </aside>
+  </div>
+
+  <!-- 线装书签：阅读进度 -->
+  <div id="progress" class="progress" aria-hidden="true"></div>
+
+  <!-- 轻提示 -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+</div>
+
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/highlight/highlight.min.js"></script>
+<script src="vendor/node_modules/katex/dist/katex.min.js"></script>
+<script src="vendor/node_modules/katex/dist/contrib/auto-render.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

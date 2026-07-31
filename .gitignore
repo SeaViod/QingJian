@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+build/
+/dist/
+
+# 打包产物（exe 通过 GitHub Releases 发布）
+QingJian.exe
+
+# npm 安装痕迹（vendor 仅保留运行时所需文件）
+vendor/package.json
+vendor/package-lock.json
+vendor/node_modules/.bin/
+vendor/node_modules/commander/
+
+# katex 仅保留运行时 dist 与许可证
+vendor/node_modules/katex/src/
+vendor/node_modules/katex/contrib/
+vendor/node_modules/katex/types/
+vendor/node_modules/katex/cli.js
+vendor/node_modules/katex/katex.ts
+vendor/node_modules/katex/README.md
+
+# 系统
+Thumbs.db
+Desktop.ini
