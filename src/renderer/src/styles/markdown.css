@@ -1,0 +1,386 @@
+/* ============================================================
+   纸墨 · 正文排版
+   所有规则只作用于 .md，不污染界面本身。
+   ============================================================ */
+
+.md {
+  font-family: var(--font-serif);
+  font-size: var(--doc-fs);
+  line-height: var(--doc-lh);
+  color: var(--ink);
+  padding: 20px 42px 90px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  caret-color: var(--accent);
+}
+.md:focus {
+  outline: none;
+}
+
+/* ---------- 标题 ---------- */
+.md h1,
+.md h2,
+.md h3,
+.md h4,
+.md h5,
+.md h6 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  line-height: 1.32;
+  scroll-margin-top: 24px;
+  position: relative;
+}
+.md h1 {
+  font-size: 33px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 6px 0 22px;
+}
+.md h2 {
+  font-size: 23px;
+  font-weight: 700;
+  margin: 38px 0 13px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line);
+}
+.md h2::before {
+  content: "§ ";
+  color: var(--accent);
+  font-weight: 400;
+}
+.md h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 28px 0 9px;
+}
+.md h4 {
+  font-size: 16.5px;
+  margin: 22px 0 7px;
+}
+.md h5,
+.md h6 {
+  font-size: 15px;
+  color: var(--ink-2);
+  margin: 18px 0 6px;
+}
+
+/* 标题锚点：鼠标移上去才出现的 ¶ */
+.md .anchor {
+  position: absolute;
+  left: -1.45em;
+  top: 0.1em;
+  font-size: 0.72em;
+  color: var(--ink-3);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  user-select: none;
+}
+.md h1:hover .anchor,
+.md h2:hover .anchor,
+.md h3:hover .anchor,
+.md h4:hover .anchor {
+  opacity: 1;
+}
+.md .anchor:hover {
+  color: var(--accent);
+}
+
+/* ---------- 段落与行内 ---------- */
+.md p {
+  margin: 13px 0;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+.md a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent-soft);
+  transition: text-decoration-color var(--dur-fast) var(--ease);
+}
+.md a:hover {
+  text-decoration-color: var(--accent);
+}
+.md strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.md em {
+  font-style: italic;
+}
+.md del {
+  color: var(--ink-3);
+  text-decoration-color: var(--ink-3);
+}
+.md mark {
+  background: linear-gradient(transparent 56%, #f5d78e 56%);
+  color: inherit;
+  padding: 0 2px;
+}
+html[data-theme="ink"] .md mark {
+  background: linear-gradient(transparent 56%, #6b5520 56%);
+  color: var(--ink);
+}
+.md sup,
+.md sub {
+  font-size: 0.74em;
+}
+
+/* ---------- 列表 ---------- */
+.md ul,
+.md ol {
+  margin: 12px 0;
+  padding-left: 26px;
+}
+.md li {
+  margin: 5px 0;
+}
+.md li > ul,
+.md li > ol {
+  margin: 5px 0;
+}
+.md ul li::marker {
+  color: var(--accent);
+}
+.md ol li::marker {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 任务列表 */
+.md li.task-list-item {
+  list-style: none;
+  margin-left: -24px;
+}
+.md li.task-list-item > input[type="checkbox"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  margin-top: 0;
+  vertical-align: -2px;
+  border: 1.5px solid var(--ink-3);
+  border-radius: 4px;
+  cursor: default;
+  position: relative;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.md li.task-list-item > input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.md li.task-list-item > input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 3.5px;
+  top: 0.5px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(43deg);
+}
+/* 已勾选的任务整行转灰划线 */
+.md li.task-list-item:has(> input[type="checkbox"]:checked) {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-3);
+}
+
+/* ---------- 引用 ---------- */
+.md blockquote {
+  margin: 20px 0;
+  padding: 8px 22px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(90deg, var(--accent-soft), transparent 78%);
+  color: var(--ink-2);
+  font-style: italic;
+}
+.md blockquote p {
+  margin: 8px 0;
+}
+.md blockquote > :first-child {
+  margin-top: 0;
+}
+.md blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 代码 ---------- */
+.md code {
+  font-family: var(--font-mono);
+  font-size: 0.845em;
+  background: var(--paper-2);
+  color: var(--accent-ink);
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line-soft);
+}
+
+.md pre {
+  position: relative;
+  margin: 20px 0;
+  padding: 0;
+  border-radius: 12px;
+  background: var(--code-bg) !important;
+  overflow: hidden;
+  box-shadow: 0 10px 26px -16px rgba(30, 20, 10, 0.55);
+}
+.md pre code {
+  display: block;
+  padding: 34px 18px 17px;
+  background: none !important;
+  border: 0;
+  color: var(--code-fg);
+  font-size: 13px;
+  line-height: 1.72;
+  overflow-x: auto;
+  tab-size: 2;
+}
+.md pre .code-lang {
+  position: absolute;
+  left: 15px;
+  top: 11px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(239, 230, 214, 0.42);
+  user-select: none;
+  pointer-events: none;
+}
+.md pre .code-copy {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(239, 230, 214, 0.55);
+  background: rgba(255, 255, 255, 0.07);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.md pre:hover .code-copy {
+  opacity: 1;
+}
+.md pre .code-copy:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+}
+.md pre .code-copy.done {
+  color: #8fd6a4;
+  opacity: 1;
+}
+
+/* ---------- 表格 ---------- */
+.md .table-wrap {
+  margin: 20px 0;
+  overflow-x: auto;
+}
+.md table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.94em;
+  font-variant-numeric: tabular-nums;
+}
+.md th {
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 0.76em;
+  font-weight: 650;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  border-bottom: 2px solid var(--ink);
+  padding: 9px 11px;
+  white-space: nowrap;
+}
+.md td {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 11px;
+  vertical-align: top;
+}
+.md tbody tr {
+  transition: background var(--dur-fast) var(--ease);
+}
+.md tbody tr:hover {
+  background: var(--paper-2);
+}
+
+/* ---------- 分割线：三颗朱砂星 ---------- */
+.md hr {
+  border: 0;
+  height: auto;
+  margin: 36px 0;
+  text-align: center;
+  overflow: visible;
+}
+.md hr::after {
+  content: "✦   ✦   ✦";
+  color: var(--accent);
+  letter-spacing: 8px;
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+/* ---------- 图片 ---------- */
+.md img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px -18px rgba(60, 44, 20, 0.5);
+  cursor: zoom-in;
+}
+.md img.inline {
+  display: inline;
+  margin: 0 2px;
+  vertical-align: -0.15em;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* ---------- 数学 ---------- */
+.md .katex {
+  font-size: 1.04em;
+}
+.md .katex-display {
+  margin: 20px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+.md .math-error {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ---------- 脚注 ---------- */
+.md .footnotes {
+  margin-top: 44px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.88em;
+  color: var(--ink-2);
+}
+.md .footnotes ol {
+  padding-left: 20px;
+}
+.md .footnote-ref a {
+  font-size: 0.75em;
+  padding: 0 2px;
+  text-decoration: none;
+}
+.md .footnote-backref {
+  text-decoration: none;
+  margin-left: 4px;
+  color: var(--ink-3);
+}
